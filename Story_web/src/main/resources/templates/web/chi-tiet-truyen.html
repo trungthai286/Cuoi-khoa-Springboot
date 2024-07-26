@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${stories.title}">Chi tiết truyện</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Owl Carousel CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+          rel="stylesheet">
+
+    <!-- Link Css -->
+    <link rel="stylesheet" th:href="@{/web-assets/css/style.css}">
+
+</head>
+
+<body class="bg-dark">
+
+<header>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="logo" href="/"><img src="/web-assets/img/logo.png" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Danh mục
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark ">
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Thể loại
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark ">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item " th:href="@{/theloai/{slug}(slug=${category.slug})}"
+                                   th:text="${category.name}">Ds thể loại</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div>
+                        <input class=" form me-3 p-1  rounded-1 fst-italic " type="search" placeholder="  Tìm truyện"
+                               aria-label="Search">
+                    </div>
+                </div>
+                <button class="btn btn-outline-warning p-1">Lọc truyện
+                </button>
+                <div>
+                    <a href="#"><img class="avatar" src="/web-assets/img/avatar.jpeg" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<!-- Section-1 -->
+<section class="pb-4 bg-dark">
+    <!-- Banner 1-->
+    <div class="container pb-4">
+        <div class="row">
+            <div class="col">
+                <div class="banner-item">
+                    <div class="story-poster rounded overflow-hidden">
+                        <a th:if="${randomStory != null}" th:href="@{/truyen/{id}(id=${randomStory.id})}">
+                            <img th:src="${randomStory.poster}" th:alt="${randomStory.title}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CHI TIẾT TRUYỆN -->
+
+    <div class="container">
+        <div class="mb-3 text-white">
+            <div class="row g-0">
+                <div class="col-2 rounded overflow-hidden">
+                    <img th:src="${stories.imageUrl}" class="img-fluid" th:alt="${stories.title}">
+                </div>
+                <div class="col-10 ps-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 th:text="${stories.title}">Từ Địa Phược Linh Đến Tokyo Tà Thần</h5>
+                        <p class="text-secondary" th:text="${stories.author}">Tác giả</p>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <div>
+                            <a href="#" class="btn btn-outline-success me-3"><i class="fa-regular fa-bookmark me-2"></i>Đánh
+                                Dấu</a>
+                        </div>
+                        <div class="div-note">
+                            <a href="#" class="btn btn-outline-success me-3 "><i class="fa-solid fa-list me-2"></i>Mục
+                                Lục </a>
+                            <div class="bg-warning text-dark note ">123</div>
+                        </div>
+                        <div class="div-note">
+                            <a href="#" class="btn btn-outline-success me-3"><i class="fa-regular fa-star me-2"></i>Đánh
+                                Giá</a>
+                            <div class="bg-warning text-dark note ">123</div>
+                        </div>
+                        <div class="div-note">
+                            <a href="#" class="btn btn-outline-success me-3"><i class="fa-regular fa-comment me-2"></i>bình
+                                Luận</a>
+                            <div class="bg-warning text-dark note ">123</div>
+                        </div>
+
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="text-center p-2">
+                            <p class="m-0">12</p>
+                            <p class="m-0">Chs/tuần</p>
+                        </div>
+                        <div class="text-center border-start border-secondary p-2">
+                            <p class="m-0">12</p>
+                            <p class="m-0">Lượt đọc</p>
+                        </div>
+                        <div class="text-center border-start border-secondary p-2">
+                            <p class="m-0">12</p>
+                            <p class="m-0">Đề cử</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 d-flex justify-content-start">
+                        <a th:text="${stories.type.getName()}"
+                           class="nav-link border border-warning rounded-1 text-warning px-2 me-2">Còn
+                            tiếp</a>
+                        <div th:each="story, iterStat : ${stories.categories}">
+                            <a th:if="${iterStat.index == 0}" th:text="${story.name}"
+                               class="nav-link border border-danger rounded-1 text-danger px-2 me-2"></a>
+                            <a th:if="${iterStat.index != 0}" th:text="${story.name}"
+                               class="nav-link border border-success rounded-1 text-success px-2 me-2"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chương mới -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="stories">
+                    <div class="d-flex justify-content-between bg-secondary"><a class="nav-link text-warning p-2"href="#">CHƯƠNG MỚI</a>
+                        <a href="#"><i class="fa-solid fa-angles-right text-warning p-2"></i></a>
+                    </div>
+                    <div th:with="latestChapters=${chapter.size() > 5} ? ${chapter.subList(0, 5)} : ${chapter}">
+                        <div class="d-flex justify-content-between py-2 px-3" th:each="chapter1, iterStat : ${latestChapters}">
+                            <div>
+                                <a class="nav-link text-white fw-semibold" href="#"
+                                   th:text="'Chương ' + ${chapter1.chapterNumber} + ': ' + ${chapter1.title}">
+                                    Lần Thứ Nhất Thế Giới Ma Pháp Đại Chiến
+                                </a>
+                            </div>
+                            <div>
+                                <p class="text-dark-emphasis" th:text="${chapter1.publishedAt}">2 giờ trước</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <!-- Banner 2-->
+    <div class="container pb-4">
+        <div class="row">
+            <div class="col">
+                <div class="banner-item">
+                    <div class="story-poster rounded overflow-hidden">
+                        <a th:if="${randomStory != null}" th:href="@{/truyen/{id}(id=${randomStory.id})}">
+                            <img th:src="${randomStory.poster}" th:alt="${randomStory.title}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Giới thiệu -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="stories">
+                    <div class="d-flex justify-content-between bg-secondary"><a class="nav-link text-warning p-2"
+                                                                                href="#">GIỚI THIỆU</a>
+                    </div>
+                    <div class="py-2 px-3 text-white">
+                        <p th:text="${stories.description}">
+                            Phần giới thiệu truyện
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Cùng đăng bởi 1 người -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="stories">
+                    <div class="d-flex justify-content-between bg-secondary  p-2 mb-4">
+                        <div class="d-flex justify-content-between"><a class="nav-link text-warning" href="#">CÙNG
+                            ĐĂNG BỞI:</a>
+                            <a class="nav-link text-warning ms-2 ">Người dịch</a>
+                        </div>
+                        <a href="#"><i class="fa-solid fa-angles-right text-warning"></i></a>
+                    </div>
+                    <div class="col-2">
+                        <div class="banner-item">
+                            <div class="story-poster rounded overflow-hidden">
+                                <a href=""><img src="/web-assets/img/anh truyen 2.webp" alt=""></a>
+                            </div>
+                            <p class="mt-2 text-white">Tên truyện ...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <!-- Banner 3-->
+    <div class="container pb-4">
+        <div class="row">
+            <div class="col">
+                <div class="banner-item">
+                    <div class="story-poster rounded overflow-hidden">
+                        <a th:if="${randomStory != null}" th:href="@{/truyen/{id}(id=${randomStory.id})}">
+                            <img th:src="${randomStory.poster}" th:alt="${randomStory.title}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bình luận -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="stories">
+                    <div class="d-flex justify-content-center bg-secondary"><a class="nav-link text-warning p-2" href="#">BÌNH LUẬN</a>
+                    </div>
+                    ¬
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+</section>
+<!-- Footer -->
+<footer class=" py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="text-white mb-0 mt-3 ">Truyện Chữ là nền tảng mở trực tuyến, miễn phí đọc truyện chữ
+                    được đóng góp nội dung từ các tác giả viết truyện và các dịch giả convert, dịch truyện, rất
+                    nhiều truyện hay và nổi bật được cập nhật nhanh nhất với đủ các thể loại tiên hiệp, kiếm hiệp,
+                    huyền ảo ....</p>
+                <div class="d-flex justify-content-center"><img class="logo-footer" src="/web-assets/img/logo.png"
+                                                                alt="logo">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<!-- Link JS -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+
+</html>

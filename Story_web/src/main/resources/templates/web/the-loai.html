@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thể loại</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Owl Carousel CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/web-assets/css/style.css}">
+
+</head>
+<body>
+<header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container">
+            <a class="logo" href="/"><img src="/web-assets/img/logo.png" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Danh mục
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark ">
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Thể loại
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark ">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item" th:href="@{/theloai/{slug}(slug=${category.slug})}" th:text="${category.name}">Ds thể loại</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div>
+                        <input class=" form me-3 p-1  rounded-1 fst-italic " type="search" placeholder="  Tìm truyện" aria-label="Search">
+                    </div>
+                </div>
+                <button class="btn btn-outline-warning p-1">Lọc truyện
+                </button>
+                <div>
+                    <a href="#"><img class="avatar" src="/web-assets/img/avatar.jpeg" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Section-1 -->
+<section class="pb-4 bg-dark">
+    <!-- Banner 1 -->
+    <div class="container pb-4">
+        <div class="row">
+            <div class="col">
+                <div class="banner-item">
+                    <div class="story-poster rounded overflow-hidden">
+                        <a th:if="${randomStory != null}" th:href="@{/truyen/{id}(id=${randomStory.id})}">
+                            <img th:src="${randomStory.poster}" th:alt="${randomStory.title}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Truyện cùng thể loại -->
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <a class="nav-link text-warning pb-2" th:text="'TRUYỆN THỂ LOẠI: ' + ${categoryName}"></a>
+        </div>
+        <div class="row">
+            <div class="col-6" th:each="story : ${pageData.content}">
+                <div class="d-flex pt-3 px-3">
+                    <div class="col-2 rounded overflow-hidden story-detail-img">
+                        <a th:href="@{/truyen/{id}(id=${story.id})}">
+                            <img th:src="${story.imageUrl}" th:alt="${story.title}">
+                        </a>
+                    </div>
+                    <div class="p-2">
+                        <div class="col-9">
+                            <a class="nav-link text-white fw-semibold" th:href="@{/truyen/{id}(id=${story.id})}" th:text="${story.title}">Tên truyện</a>
+                        </div>
+                        <div>
+                            <p class="text-dark-emphasis" th:text="${story.description}">Mô tả</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                                <span><i class="fa-solid fa-user text-white pe-2"></i></span>
+                                <a class="nav-link text-white" th:href="@{/author/{name}(name=${story.author})}" th:text="${story.author}">Tác giả</a>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div class="text-white px-2">123 chương</div>
+                                <div th:if="${not #lists.isEmpty(story.categories)}">
+                                    <a class="nav-link border border-warning rounded-1 text-warning px-2" th:text="${story.categories[0].name}">Thể loại</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav th:if="${pageData.totalPages > 1}" aria-label="..." class="d-flex justify-content-center mt-3">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/theloai/{slug}(slug=${categorySlug}, page=${currentPage - 1})}">Trước</a>
+                </li>
+                <li class="page-item" th:each="number : ${#numbers.sequence(1, pageData.totalPages)}"
+                    th:classappend="${currentPage == number} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/theloai/{slug}(slug=${categorySlug}, page=${number})}" th:text="${number}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == pageData.totalPages} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{/theloai/{slug}(slug=${categorySlug}, page=${currentPage + 1})}">Sau</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="text-white mb-0 mt-3">Truyện Chữ là nền tảng mở trực tuyến, miễn phí đọc truyện chữ được đóng góp nội dung từ các tác giả viết truyện và các dịch giả convert, dịch truyện, rất nhiều truyện hay và nổi bật được cập nhật nhanh nhất với đủ các thể loại tiên hiệp, kiếm hiệp, huyền ảo ....</p>
+                <div class="d-flex justify-content-center"><img class="logo-footer" src="/web-assets/img/logo.png" alt="logo"></div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Link JS -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

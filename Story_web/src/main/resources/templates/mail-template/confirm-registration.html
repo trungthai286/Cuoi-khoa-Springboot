@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 600px;
+            margin: 100px auto;
+        }
+
+        .header {
+            padding: 20px 0;
+            background-color: #222;
+            text-align: center;
+        }
+
+        .header img {
+            width: 200px;
+        }
+
+        .content {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .content p {
+            margin-bottom: 16px;
+        }
+
+        .content .name {
+            font-weight: bold;
+        }
+
+        .btn-confirm {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #222;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+
+        .btn-confirm:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="https://assets.metruyencv.com/build/assets/logo-776b73c9.png" alt="">
+    </div>
+
+    <div class="content">
+        <p>Xin chào: <span class="name" th:text="${user.name}">Tên tk đăng ký</span></p>
+        <p>Chung toi da nhan duoc yeu cau xac thuc tai khoan tu ban. Vui long nhap vao lien ket duoi day de xac thuc tai
+            khoan cua ban:</p>
+        <a href="http://example.com/verify?token=abc123" class="btn-confirm">Link xac thuc</a>
+        <p>Lien ket xac thuc nay se het han trong vong 1 ngay ke tu khi ban dang ky.</p>
+        <p>Tran trong.</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="'Chương ' + ${chapter.chapterNumber} + ': ' + ${chapter.title}">Trang đọc truyện</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Link Css -->
+    <link rel="stylesheet" th:href="@{/web-assets/css/style.css}">
+
+</head>
+<body>
+<header>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container">
+            <a class="logo" href="/"><img src="/web-assets/img/logo.png" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Danh mục
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark ">
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Danh mục</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Thể loại
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark ">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item" th:href="@{/theloai/{slug}(slug=${category.slug})}"
+                                   th:text="${category.name}">Ds thể loại</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div>
+                        <input class=" form me-3 p-1  rounded-1 fst-italic " type="search" placeholder="  Tìm truyện"
+                               aria-label="Search">
+                    </div>
+                </div>
+                <button class="btn btn-outline-warning p-1">Lọc truyện
+                </button>
+                <div>
+                    <a href="#"><img class="avatar" src="/web-assets/img/avatar.jpeg" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<!-- Section-1 -->
+<section class="pb-4 bg-dark">
+    <!-- Banner 1-->
+    <div class="container pb-4">
+        <div class="row">
+            <div class="col">
+                <div class="banner-item">
+                    <div class="story-poster rounded overflow-hidden">
+                        <a th:if="${randomStory != null}" th:href="@{/truyen/{id}(id=${randomStory.id})}">
+                            <img th:src="${randomStory.poster}" th:alt="${randomStory.title}">
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cấu hình -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="stories">
+                    <div class="d-flex justify-content-center">
+                        <a class="nav-link text-white fs-5 fw-semibold"
+                           th:text="${chapter.story.title}">
+                            Tên truyện
+                        </a>
+                    </div>
+
+                    <div class="d-flex justify-content-center text-secondary">
+                        <p th:text="${chapter.story.author}">Ten tac gia</p>
+                    </div>
+                    <div class="d-flex justify-content-center  text-white mb-4">
+                        <a class="btn btn-outline-success p-1"
+                           th:if="${chapter.chapterNumber > 1}"
+                           th:href="@{/doctruyen/{storyId}/chuong-so/{chapterNumber}(storyId=${chapter.story.id}, chapterNumber=${chapter.chapterNumber - 1})}">
+                            <i class="fa-solid fa-angles-left"></i>
+                        </a>
+                        <p class="mx-4" th:text="${chapter.title}">Ten chuong truyen</p>
+                        <button class="btn btn-outline-success p-1" ><i class="fa-solid fa-angles-right" ></i></button>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <!-- Modal-1-->
+                            <div class="div-note">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-success me-3" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop1"><i class="fa-solid fa-gear me-2"></i>Cấu hình
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-6" id="staticBackdropLabel1">Cài đặt trang đọc
+                                                    truyện</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div>
+                                                <ul th:each="chap:${chapters}">
+                                                    <li th:text="${chap.title}">
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--  Modal 2-->
+                            <div class="div-note">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-success me-3" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop"><i class="fa-solid fa-list me-2"></i>Mục Lục
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-6" id="staticBackdropLabel">Danh sách
+                                                    chương</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="list-group" th:each="chap:${chapters}">
+                                                    <!-- Duyệt qua danh sách các chương sử dụng Thymeleaf -->
+                                                    <li class="list-group-item">
+                                                        <a class="nav-link fw-semibold"
+                                                           th:text="${'Chương ' + chap.chapterNumber + ': ' + chap.title}"></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>
+                                <a href="#" class="btn btn-outline-success me-3"><i
+                                        class="fa-regular fa-bookmark me-2"></i>Đánh
+                                    Dấu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="d-flex justify-content-center text-white my-4"><p th:text="${chapter.content}">123</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="bg-dark py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col ">
+                <p class="text-white  mb-0 mt-3  ">Truyện Chữ là nền tảng mở trực tuyến, miễn phí đọc truyện chữ
+                    được đóng góp nội dung từ các tác giả viết truyện và các dịch giả convert, dịch truyện, rất
+                    nhiều truyện hay và nổi bật được cập nhật nhanh nhất với đủ các thể loại tiên hiệp, kiếm hiệp,
+                    huyền ảo ....</p>
+                <div class="d-flex justify-content-center"><img class="logo-footer" src="/web-assets/img/logo.png"
+                                                                alt="logo">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+
+<!-- Link JS -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+
+</html>

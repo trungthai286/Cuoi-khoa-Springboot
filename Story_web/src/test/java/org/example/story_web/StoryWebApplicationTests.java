@@ -3,27 +3,16 @@ package org.example.story_web;
 import com.github.javafaker.Faker;
 
 import com.github.slugify.Slugify;
-import org.example.story_web.entity.Category;
-import org.example.story_web.entity.Chapter;
-import org.example.story_web.entity.Role;
-import org.example.story_web.entity.Stories;
-import org.example.story_web.entity.User;
+import org.example.story_web.entity.*;
 import org.example.story_web.model.enums.StoriesType;
-import org.example.story_web.repository.CategoryRepository;
-import org.example.story_web.repository.ChapterRepository;
-import org.example.story_web.repository.RoleRepository;
-import org.example.story_web.repository.StoriesRepository;
-import org.example.story_web.repository.UserRepository;
+import org.example.story_web.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -38,9 +27,12 @@ class StoryWebApplicationTests {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private ReviewRepository reviewRepository;
+    @Autowired
     private RoleRepository roleRepository; // Thêm repository cho Role
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @Test
     void save_categories() {
@@ -144,7 +136,7 @@ class StoryWebApplicationTests {
         // Tìm các vai trò "USER" và "ADMIN" từ cơ sở dữ liệu
         Role userRole = roleRepository.findByName("USER").orElse(null);
         Role adminRole = roleRepository.findByName("ADMIN").orElse(null);
-
+        Faker faker = new Faker();
         // Tạo người dùng với vai trò "USER" và "ADMIN"
         User user1 = User.builder()
                 .name("thai")
@@ -168,6 +160,48 @@ class StoryWebApplicationTests {
                 .enabled(true) // Đảm bảo rằng tài khoản được kích hoạt
                 .build();
         userRepository.save(user2);
+
+        // Tạo thêm 30 người dùng với vai trò "USER"
+        for (int i = 0; i < 30; i++) {
+            String name = faker.name().firstName();
+            String email = name.toLowerCase() + "@gmail.com";
+            String avatar = "https://placehold.co/600x400?text=" + name;
+            double balance = faker.number().randomDouble(2, 100, 1000); // Số dư ngẫu nhiên từ 100 đến 1000
+
+            User user = User.builder()
+                    .name(name)
+                    .email(email)
+                    .password(passwordEncoder.encode("123"))
+                    .roles(List.of(userRole)) // Gán vai trò "USER"
+                    .avatar(avatar) // Thêm avatar
+                    .balance(balance) // Thêm số dư ngẫu nhiên
+                    .enabled(true) // Đảm bảo rằng tài khoản được kích hoạt
+                    .build();
+            userRepository.save(user);
+        }
+    }
+    @Test
+    void save_reviews() {
+        Random rd = new Random();
+        Faker faker = new Faker();
+        List<Stories> stories = storiesRepository.findAll();
+        List<User> users = userRepository.findAll();
+
+        for (Stories story : stories) {
+            // Random 5 -> 10 reviews
+            for (int i = 0; i < rd.nextInt(6) + 5; i++) {
+                User rdUser = users.get(rd.nextInt(users.size()));
+                Review review = Review.builder()
+                        .content(faker.lorem().paragraph())
+                        .rating(rd.nextInt(6) + 1) // Giả sử rating từ 1 đến 6
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .stories(story)
+                        .user(rdUser)
+                        .build();
+                reviewRepository.save(review);
+            }
+        }
     }
 
 }

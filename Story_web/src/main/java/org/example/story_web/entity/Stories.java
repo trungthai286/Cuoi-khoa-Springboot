@@ -1,5 +1,6 @@
 package org.example.story_web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -51,4 +52,10 @@ public class Stories {
     List<Category> categories;
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Chapter> chapters;
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "stories", cascade = CascadeType.ALL)
+    List<Review> reviews;
+
 }

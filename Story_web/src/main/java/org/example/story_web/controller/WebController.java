@@ -136,7 +136,4 @@ public class WebController {
         }
         return "/web/doc-truyen";
     }
-
-
-
 }

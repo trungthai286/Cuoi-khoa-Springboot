@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8">
@@ -32,7 +33,7 @@
 
 <header>
     <!-- navbar -->
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container">
             <a class="logo" href="/"><img src="/web-assets/img/logo.png" alt=""></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -58,17 +59,16 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item dropdown ">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             Thể loại
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark ">
                             <li th:each="category : ${categories}">
-                                <a class="dropdown-item " th:href="@{/theloai/{slug}(slug=${category.slug})}"
+                                <a class="dropdown-item" th:href="@{/theloai/{slug}(slug=${category.slug})}"
                                    th:text="${category.name}">Ds thể loại</a>
                             </li>
-
                         </ul>
                     </li>
                 </ul>
@@ -81,8 +81,44 @@
                 <button class="btn btn-outline-warning p-1">Lọc truyện
                 </button>
                 <div>
-                    <a href="#"><img class="avatar" src="/web-assets/img/avatar.jpeg" alt=""></a>
+                    <!-- Hiển thị liên kết đăng nhập nếu người dùng chưa đăng nhập -->
+                    <button class="btn btn-outline-success p-1 ms-3" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">Đăng nhập</a>
+                    </button>
+
+                    <!-- Hiển thị dropdown nếu người dùng đã đăng nhập -->
+                    <th:block sec:authorize="isAuthenticated()">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle ms-3" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <th:block sec:authentication="name"></th:block> <!-- Hiển thị tên người dùng -->
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Hiển thị liên kết trang quản trị nếu người dùng có vai trò ADMIN -->
+                                <li sec:authorize="hasRole('ADMIN')">
+                                    <a class="dropdown-item" href="/admin/users">Trang quản trị</a>
+                                </li>
+                                <!-- Các liên kết khác -->
+                                <li>
+                                    <a class="dropdown-item" href="/thong-tin-ca-nhan">Thông tin cá nhân</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/phim-yeu-thich">Truyện yêu thích</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/lich-su-xem-truyen">Lịch sử xem truyện</a>
+                                </li>
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <button type="submit" class="dropdown-item ">Đăng xuất</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </th:block>
                 </div>
+
+
             </div>
         </div>
     </nav>
@@ -278,42 +314,32 @@
             </div>
         </div>
     </div>
-
-
-        <!-- Bình luận -->
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="stories">
-                        <div class="d-flex justify-content-center bg-secondary"><a class="nav-link text-warning p-2"
-                                                                                   href="#">BÌNH LUẬN</a>
-                        </div>
-                        ¬
-                    </div>
-
+</section>
+<!-- Bình luận -->
+<section class="bg-dark">
+    <div class="container">
+        <div class="col  bg-white">
+            <div class="stories">
+                <div class="d-flex justify-content-center bg-secondary"><a class="nav-link text-warning p-2" href="#">BÌNH LUẬN</a>
                 </div>
             </div>
-        </div>
-        </div>
-</section>
-<section class="py-4 bg-white">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="text-uppercase mb-3">Bình luận</h4>
-            <button th:if="${session.currentUser != null}" type="button" class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalReview">
-                Viết bình luận
-            </button>
-        </div>
-        <p th:if="${session.currentUser == null}">Vui lòng <a href="/login" class="text-decoration-underline">đăng
-            nhập</a> để viết bình luận.</p>
+            <div class="d-flex justify-content-between align-items-center m-3">
+                <!-- Sử dụng sec:authorize để kiểm tra xem người dùng đã đăng nhập hay chưa -->
+                <button sec:authorize="isAuthenticated()" type="button" class="btn btn-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReview">
+                    Viết bình luận
+                </button>
+            </div>
+            <!-- Sử dụng sec:authorize để kiểm tra xem người dùng chưa đăng nhập -->
+            <p class="ms-3" sec:authorize="!isAuthenticated()">Vui lòng <a href="/login" class="text-decoration-underline ">đăng nhập</a> để viết bình luận.</p>
 
-        <div class="review-list">
+            <div class="review-list">
+                <!--Review-render-->
+            </div>
 
+            <div id="pagination" class="d-flex justify-content-center"></div>
         </div>
-
-        <div id="pagination" class="d-flex justify-content-center"></div>
     </div>
 </section>
 

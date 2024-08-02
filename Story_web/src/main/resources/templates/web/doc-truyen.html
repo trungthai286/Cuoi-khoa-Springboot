@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8">
@@ -66,8 +67,45 @@
                 <button class="btn btn-outline-warning p-1">Lọc truyện
                 </button>
                 <div>
-                    <a href="#"><img class="avatar" src="/web-assets/img/avatar.jpeg" alt=""></a>
+                    <!-- Hiển thị liên kết đăng nhập nếu người dùng chưa đăng nhập -->
+                    <button class="btn btn-outline-success p-1 ms-3" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">Đăng nhập</a>
+                    </button>
+
+                    <!-- Hiển thị dropdown nếu người dùng đã đăng nhập -->
+                    <th:block sec:authorize="isAuthenticated()">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle ms-3" type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <th:block sec:authentication="name"></th:block> <!-- Hiển thị tên người dùng -->
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Hiển thị liên kết trang quản trị nếu người dùng có vai trò ADMIN -->
+                                <li sec:authorize="hasRole('ADMIN')">
+                                    <a class="dropdown-item" href="/admin/users">Trang quản trị</a>
+                                </li>
+                                <!-- Các liên kết khác -->
+                                <li>
+                                    <a class="dropdown-item" href="/thong-tin-ca-nhan">Thông tin cá nhân</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/phim-yeu-thich">Truyện yêu thích</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/lich-su-xem-truyen">Lịch sử xem truyện</a>
+                                </li>
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <button type="submit" class="dropdown-item ">Đăng xuất</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </th:block>
                 </div>
+
+
             </div>
         </div>
     </nav>
@@ -112,7 +150,7 @@
                             <i class="fa-solid fa-angles-left"></i>
                         </a>
                         <p class="mx-4" th:text="${chapter.title}">Ten chuong truyen</p>
-                        <button class="btn btn-outline-success p-1" ><i class="fa-solid fa-angles-right" ></i></button>
+                        <button class="btn btn-outline-success p-1"><i class="fa-solid fa-angles-right"></i></button>
                     </div>
                     <div>
                         <div class="d-flex justify-content-center">
@@ -150,6 +188,7 @@
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-outline-success me-3" data-bs-toggle="modal"
                                         data-bs-target="#staticBackdrop"><i class="fa-solid fa-list me-2"></i>Mục Lục
+                                    <div class="bg-warning text-dark note ">123</div>
                                 </button>
                                 <!-- Modal -->
                                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"

@@ -4,7 +4,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import org.example.story_web.entity.*;
+import org.example.story_web.exception.ResourceNotFoundException;
 import org.example.story_web.model.enums.StoriesType;
+import org.example.story_web.repository.UserRepository;
 import org.example.story_web.response.VerifyResponse;
 import org.example.story_web.security.IsUser;
 import org.example.story_web.service.*;
@@ -28,7 +30,7 @@ public class WebController {
     private final ChapterService chapterService;
     private final AuthService authService;
     private final ReviewService reviewService;
-    private final HttpSession session;
+private final UserRepository userRepository;
 
     @IsUser
     @GetMapping("/user")
@@ -88,7 +90,7 @@ public class WebController {
     @GetMapping("/truyen/{id}")
     public String getStoryDetail(Model model, @PathVariable Integer id) {
 
-        User user = (User) session.getAttribute("currentUser");
+
         // Trả về thông tin truyen
         Stories stories = webService.getStoryDetail(id);
         model.addAttribute("stories", stories);
@@ -100,9 +102,11 @@ public class WebController {
         model.addAttribute("randomStory", randomStory);
         List<Review> reviews = reviewService.getReviewsByStory(id);
         model.addAttribute("reviews", reviews);
+
+        User currentUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        model.addAttribute("currentUser", currentUser);
         return "web/chi-tiet-truyen";
-
-
 
     }
 
@@ -144,8 +148,6 @@ public class WebController {
 
     @GetMapping("/thong-tin-ca-nhan")
     public String getProfilePage(Model model) {
-        User user = (User) session.getAttribute("currentUser");
-        model.addAttribute("user", user);
         return "web/thong-tin-ca-nhan";
     }
 }

@@ -79,39 +79,48 @@ function formatDate(dateString) {
 
 const renderReviews = (reviews) => {
     let html = "";
-    reviews.forEach((review) => {
-        html += `
-            <div class="review-item d-flex mb-4">
-                <div class="review-avatar">
-                    <img class="avatar" src=${review.user.avatar} alt=${review.user.name}>
-                </div>
-                <div class="review-info ps-3">
-                    <p class="mb-0">
-                        <span class="fw-bold">${review.user.name}</span>
-                        <span class="fst-italic text-muted">
-                            (${formatDate(review.createdAt)})
-                        </span>
-                    </p>
-                    <p class="mb-0 fw-bold">
-                        ${review.rating}
-                        <span class="text-warning"><i class="fa fa-star"></i></span>
-                    </p>
-                    <p class="mb-0">${review.content}</p>
-                    <div>
-                        <button 
-                            onclick="openModalReviewUpdate(${review.id})"
-                            class="text-primary border-0 bg-transparent text-decoration-underline me-1">Sửa</button>
-                        <button
-                            onclick="deleteReview(${review.id})"
-                            class="text-danger border-0 bg-transparent text-decoration-underline me-1">Xóa
-                        </button>
+
+    // Kiểm tra nếu danh sách bình luận rỗng
+    if (reviews.length === 0) {
+        html += `<p>Chưa có bình luận nào.</p>`;
+    } else {
+        // Lặp qua từng bình luận và tạo HTML cho chúng
+        reviews.forEach((review) => {
+            html += `
+                <div class="review-item d-flex mb-4">
+                    <div class="review-avatar">
+                        <img class="avatar" src="${review.user.avatar}" alt="${review.user.name}">
+                    </div>
+                    <div class="review-info ps-3">
+                        <p class="mb-0">
+                            <span class="fw-bold">${review.user.name}</span>
+                            <span class="fst-italic text-muted">
+                                (${formatDate(review.createdAt)})
+                            </span>
+                        </p>
+                        <p class="mb-0 fw-bold">
+                            ${review.rating}
+                            <span class="text-warning"><i class="fa fa-star"></i></span>
+                        </p>
+                        <p class="mb-0">${review.content}</p>
+                        <div>
+                            <button 
+                                onclick="openModalReviewUpdate(${review.id})"
+                                class="text-secondary border-0 bg-transparent text-decoration-underline me-1">Sửa</button>
+                            <button
+                                onclick="deleteReview(${review.id})"
+                                class="text-danger border-0 bg-transparent text-decoration-underline me-1">Xóa
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `
-    });
+            `;
+        });
+    }
+    // Cập nhật nội dung HTML của phần tử danh sách bình luận
     reviewListEl.innerHTML = html;
 }
+
 
 const render = reviews => {
     $('#pagination').pagination({

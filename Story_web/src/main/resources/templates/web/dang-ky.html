@@ -10,7 +10,25 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- Link css -->
     <link rel="stylesheet" th:href="@{/web-assets/css/style.css}">
-
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: rgba(0, 0, 0, 0.5); /* Màu đen với độ mờ 50% */
+            background-image: url('https://i.pinimg.com/564x/72/38/b2/7238b24f8178be3a503cae06c28b5ee8.jpg'); /* Đường dẫn tới hình ảnh của bạn */
+            background-size: cover; /* Để hình ảnh bao phủ toàn bộ trang */
+            background-repeat: no-repeat; /* Không lặp lại hình ảnh */
+            background-attachment: fixed; /* Hình ảnh cố định khi cuộn trang */
+            color: white; /* Màu chữ trắng để dễ đọc trên nền mờ */
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.75); /* Màu đen với độ mờ 75% */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Hiệu ứng bóng */
+        }
+    </style>
 </head>
 <body>
 
@@ -75,7 +93,7 @@
         try {
             const response = await axios.post('/api/auth/register', data);
             if (response.status === 200) {
-                alert('Đăng ký thành công');
+                alert('Đăng ký thành công, vào mail để kích hoạt tài khoản');
                 setTimeout(() => {
                     window.location.href = '/login';
                 }, 1000);

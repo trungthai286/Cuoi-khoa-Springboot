@@ -31,8 +31,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                        <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             Danh mục
                         </a>
@@ -45,28 +46,67 @@
                             <li><a class="dropdown-item" href="#">Danh mục</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown dropdown-menu-dark ">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle  text-white" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             Thể loại
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-dark ">
                             <li th:each="category : ${categories}">
-                                <a class="dropdown-item" th:href="@{/theloai/{slug}(slug=${category.slug})}" th:text="${category.name}">Ds thể loại</a>
+                                <a class="dropdown-item" th:href="@{/theloai/{slug}(slug=${category.slug})}"
+                                   th:text="${category.name}">Ds thể loại</a>
                             </li>
                         </ul>
                     </li>
                 </ul>
                 <div class="d-flex">
                     <div>
-                        <input class=" form me-3 p-1  rounded-1 fst-italic " type="search" placeholder="  Tìm truyện" aria-label="Search">
+                        <input class=" form me-3 p-1  rounded-1 fst-italic " type="search" placeholder="  Tìm truyện"
+                               aria-label="Search">
                     </div>
                 </div>
                 <button class="btn btn-outline-warning p-1">Lọc truyện
                 </button>
                 <div>
-                    <a href="#"><img class="avatar" src="/web-assets/img/avatar.jpeg" alt=""></a>
+                    <!-- Hiển thị liên kết đăng nhập nếu người dùng chưa đăng nhập -->
+                    <button class="btn btn-outline-success p-1 ms-3" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">Đăng nhập</a>
+                    </button>
+
+                    <!-- Hiển thị dropdown nếu người dùng đã đăng nhập -->
+                    <th:block sec:authorize="isAuthenticated()">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle ms-3" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <th:block sec:authentication="name"></th:block> <!-- Hiển thị tên người dùng -->
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Hiển thị liên kết trang quản trị nếu người dùng có vai trò ADMIN -->
+                                <li sec:authorize="hasRole('ADMIN')">
+                                    <a class="dropdown-item" href="/admin/users">Trang quản trị</a>
+                                </li>
+                                <!-- Các liên kết khác -->
+                                <li>
+                                    <a class="dropdown-item" href="/thong-tin-ca-nhan">Thông tin cá nhân</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/phim-yeu-thich">Truyện yêu thích</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/lich-su-xem-truyen">Lịch sử xem truyện</a>
+                                </li>
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <button type="submit" class="dropdown-item ">Đăng xuất</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </th:block>
                 </div>
+
+
             </div>
         </div>
     </nav>

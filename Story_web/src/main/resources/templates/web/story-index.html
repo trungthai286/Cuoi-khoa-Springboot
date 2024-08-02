@@ -73,9 +73,12 @@
                 <button class="btn btn-outline-warning p-1">Lọc truyện
                 </button>
                 <div>
-                    <!-- Hiển thị liên kết đăng nhập nếu người dùng chưa đăng nhập -->
-                    <button sec:authorize="!isAuthenticated()">
-                        <a href="/login" class="text-white">Đăng nhập</a>
+                    <!-- Hiển thị liên kết đăng nhập. đăng ký nếu người dùng chưa đăng nhập -->
+                    <button class="btn btn-outline-success p-1 ms-3" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/login">Đăng nhập</a>
+                    </button>
+                    <button class="btn btn-outline-success p-1 ms-3" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="/register">Đăng ký</a>
                     </button>
 
                     <!-- Hiển thị dropdown nếu người dùng đã đăng nhập -->
@@ -102,7 +105,7 @@
                                 </li>
                                 <li>
                                     <form th:action="@{/logout}" method="post">
-                                        <button type="submit" class="dropdown-item">Đăng xuất</button>
+                                        <button type="submit" class="dropdown-item ">Đăng xuất</button>
                                     </form>
                                 </li>
                             </ul>

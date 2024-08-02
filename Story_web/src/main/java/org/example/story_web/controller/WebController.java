@@ -1,17 +1,13 @@
 package org.example.story_web.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-import org.example.story_web.entity.Category;
-import org.example.story_web.entity.Chapter;
-import org.example.story_web.entity.Stories;
+import org.example.story_web.entity.*;
 import org.example.story_web.model.enums.StoriesType;
 import org.example.story_web.response.VerifyResponse;
 import org.example.story_web.security.IsUser;
-import org.example.story_web.service.AuthService;
-import org.example.story_web.service.CategoryService;
-import org.example.story_web.service.ChapterService;
-import org.example.story_web.service.WebService;
+import org.example.story_web.service.*;
 import org.springframework.data.domain.Page;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +27,8 @@ public class WebController {
     private final CategoryService categoryService;
     private final ChapterService chapterService;
     private final AuthService authService;
+    private final ReviewService reviewService;
+    private final HttpSession session;
 
     @IsUser
     @GetMapping("/user")
@@ -71,7 +69,7 @@ public class WebController {
 
         Stories randomStory = webService.getRandomStory();
         model.addAttribute("randomStory", randomStory);
-        return "/web/story-index";
+        return "web/story-index";
 
     }
 
@@ -84,11 +82,13 @@ public class WebController {
         model.addAttribute("categories", categories);
         Stories randomStory = webService.getRandomStory();
         model.addAttribute("randomStory", randomStory);
-        return "/web/truyen-hoan-thanh";
+        return "web/truyen-hoan-thanh";
     }
 
     @GetMapping("/truyen/{id}")
     public String getStoryDetail(Model model, @PathVariable Integer id) {
+
+        User user = (User) session.getAttribute("currentUser");
         // Trả về thông tin truyen
         Stories stories = webService.getStoryDetail(id);
         model.addAttribute("stories", stories);
@@ -98,7 +98,12 @@ public class WebController {
         model.addAttribute("chapter", chapter);
         Stories randomStory = webService.getRandomStory();
         model.addAttribute("randomStory", randomStory);
-        return "/web/chi-tiet-truyen";
+        List<Review> reviews = reviewService.getReviewsByStory(id);
+        model.addAttribute("reviews", reviews);
+        return "web/chi-tiet-truyen";
+
+
+
     }
 
     @GetMapping("/theloai/{slug}")
@@ -134,6 +139,13 @@ public class WebController {
         for (Chapter chap : chapters) {
             System.out.println("Chương: " + chap.getTitle());
         }
-        return "/web/doc-truyen";
+        return "web/doc-truyen";
+    }
+
+    @GetMapping("/thong-tin-ca-nhan")
+    public String getProfilePage(Model model) {
+        User user = (User) session.getAttribute("currentUser");
+        model.addAttribute("user", user);
+        return "web/thong-tin-ca-nhan";
     }
 }

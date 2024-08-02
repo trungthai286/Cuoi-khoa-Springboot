@@ -17,7 +17,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
           rel="stylesheet">
+    <!--    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+          integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css">
     <!-- Link Css -->
     <link rel="stylesheet" th:href="@{/web-assets/css/style.css}">
 
@@ -169,11 +174,13 @@
         <div class="row">
             <div class="col">
                 <div class="stories">
-                    <div class="d-flex justify-content-between bg-secondary"><a class="nav-link text-warning p-2"href="#">CHƯƠNG MỚI</a>
+                    <div class="d-flex justify-content-between bg-secondary"><a class="nav-link text-warning p-2"
+                                                                                href="#">CHƯƠNG MỚI</a>
                         <a href="#"><i class="fa-solid fa-angles-right text-warning p-2"></i></a>
                     </div>
                     <div th:with="latestChapters=${chapter.size() > 5} ? ${chapter.subList(0, 5)} : ${chapter}">
-                        <div class="d-flex justify-content-between py-2 px-3" th:each="chapter1, iterStat : ${latestChapters}">
+                        <div class="d-flex justify-content-between py-2 px-3"
+                             th:each="chapter1, iterStat : ${latestChapters}">
                             <div>
                                 <a class="nav-link text-white fw-semibold" href="#"
                                    th:text="'Chương ' + ${chapter1.chapterNumber} + ': ' + ${chapter1.title}">
@@ -272,22 +279,105 @@
         </div>
     </div>
 
-    <!-- Bình luận -->
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="stories">
-                    <div class="d-flex justify-content-center bg-secondary"><a class="nav-link text-warning p-2" href="#">BÌNH LUẬN</a>
-                    </div>
-                    ¬
-                </div>
 
+        <!-- Bình luận -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="stories">
+                        <div class="d-flex justify-content-center bg-secondary"><a class="nav-link text-warning p-2"
+                                                                                   href="#">BÌNH LUẬN</a>
+                        </div>
+                        ¬
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+</section>
+<section class="py-4 bg-white">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="text-uppercase mb-3">Bình luận</h4>
+            <button th:if="${session.currentUser != null}" type="button" class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalReview">
+                Viết bình luận
+            </button>
+        </div>
+        <p th:if="${session.currentUser == null}">Vui lòng <a href="/login" class="text-decoration-underline">đăng
+            nhập</a> để viết bình luận.</p>
+
+        <div class="review-list">
+
+        </div>
+
+        <div id="pagination" class="d-flex justify-content-center"></div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="modalReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tạo bình luận</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column justify-content-center align-items-center mb-3">
+                    <div class="rating">
+                        <span class="star" data-rating="1">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="2">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="3">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="4">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="5">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="6">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="7">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="8">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="9">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                        <span class="star" data-rating="10">
+                           <i class="fa-solid fa-star"></i>
+                        </span>
+                    </div>
+                    <div id="rating-value">Vui lòng chọn đánh giá</div>
+                </div>
+                <form id="form-review">
+                    <div class="mb-3">
+                        <textarea class="form-control" id="review-content" rows="5"></textarea>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Tạo bình luận</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    </div>
+</div>
 
-</section>
+<!--    -->
+
+
 <!-- Footer -->
 <footer class=" py-4">
     <div class="container">
@@ -313,6 +403,22 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+<!---->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/web-assets/js/common.js"></script>
+<script th:inline="javascript">
+    const story = [[${stories}]];
+    const reviews = [[${reviews}]];
+    let isFavorite = [[${isFavorite}]];
+
+    console.log({story, reviews, isFavorite})
+</script>
+<script src="/web-assets/js/story-review.js"></script>
+<script th:if="${session.currentUser != null}" src="/web-assets/js/story-favorite.js"></script>
 
 </body>
 

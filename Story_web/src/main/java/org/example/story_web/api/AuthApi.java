@@ -2,8 +2,9 @@ package org.example.story_web.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.story_web.request.LoginRequest;
-import org.example.story_web.request.RegisterRequest;
+
+import org.example.story_web.model.request.LoginRequest;
+import org.example.story_web.model.request.RegisterRequest;
 import org.example.story_web.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

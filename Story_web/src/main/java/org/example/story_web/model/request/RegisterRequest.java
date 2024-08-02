@@ -1,4 +1,4 @@
-package org.example.story_web.request;
+package org.example.story_web.model.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

@@ -3,7 +3,6 @@ package org.example.story_web.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.example.story_web.model.enums.UserRole;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,4 +48,8 @@ public class User {
 
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
+    // Thêm phương thức kiểm tra vai trò
+    public boolean hasRole(String roleName) {
+        return roles.stream().anyMatch(role -> role.getName().equals(roleName));
+    }
 }
